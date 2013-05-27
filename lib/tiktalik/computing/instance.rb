@@ -12,7 +12,7 @@ module Tiktalik
                   :vpsimage_uuid,      # String
                   :state,              # Fixnum
                   :running,            # Boolean
-                  :networks,           # Array(VPSNetInterface)
+                  :interfaces,         # Array(VPSNetInterface)
                   :actions,            # Array(Operation)
                   :vpsimage,           # VPSImage
                   :default_password,   # String
@@ -21,6 +21,8 @@ module Tiktalik
 
       # List of user virtual machines.
       def self.all
+        results = request(:get, '/computing/instance')
+        results.collect { |result| new(result) }
       end
 
       # Create a new virtual machine.
@@ -61,6 +63,13 @@ module Tiktalik
 
       # Do "Backup" of virtual machine. VPS need to be stopped in order to create its backup.
       def backup
+      end
+
+      private
+
+      def after_initialize
+        @interfaces = [] unless @interfaces.is_a?(Array)
+        @interfaces.collect! { |interface| VPSNetInterface.new(interface) }
       end
 
     end

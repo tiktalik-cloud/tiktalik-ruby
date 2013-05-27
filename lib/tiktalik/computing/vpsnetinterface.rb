@@ -14,6 +14,12 @@ module Tiktalik
       def destroy
       end
 
+      private
+
+      def after_initialize
+        @network = Network.new(@network)
+      end
+
     end
   end
 end
