@@ -12,6 +12,18 @@ module Tiktalik
                   :domainname, # String
                   :public      # Boolean
 
+      # List of available networks.
+      def self.all
+      end
+
+      # Create private network.
+      def self.create
+      end
+
+      # Get network.
+      def self.find(uuid)
+      end
+
     end
   end
 end

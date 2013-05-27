@@ -19,6 +19,50 @@ module Tiktalik
                   :service_name,       # String
                   :gross_cost_per_hour # Float
 
+      # List of user virtual machines.
+      def self.all
+      end
+
+      # Create a new virtual machine.
+      def self.create
+      end
+
+      # Get virtual machine details.
+      def self.find(uuid)
+      end
+
+      # Delete instance.
+      def destroy
+      end
+
+      # List of instance network interfaces.
+      def interfaces
+      end
+
+      # Create virtual machine network interface.
+      def build_interface
+      end
+
+      # Call "Install" operation on virtual machine.
+      def install
+      end
+
+      # Call "Boot" or "Start" operation on virtual machine.
+      def start
+      end
+
+      # Call "Shutdown" operation on virtual machine.
+      def stop
+      end
+
+      # Force "Shutdown" operation on virtual machine.
+      def force_stop
+      end
+
+      # Do "Backup" of virtual machine. VPS need to be stopped in order to create its backup.
+      def backup
+      end
+
     end
   end
 end

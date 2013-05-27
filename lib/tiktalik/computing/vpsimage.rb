@@ -11,6 +11,18 @@ module Tiktalik
                   :description, # String
                   :create_time  # Date
 
+      # List of VPS images.
+      def self.all
+      end
+
+      # Get image or backup.
+      def self.find(uuid)
+      end
+
+      # Delete users backup image.
+      def destroy
+      end
+
     end
   end
 end

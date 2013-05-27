@@ -10,6 +10,10 @@ module Tiktalik
                   :ip,      # String
                   :seq      # Fixnum - interface sequence number: 0 for eth0, 1 for eth1, etc.
 
+      # Remove virtual machine network interface.
+      def destroy
+      end
+
     end
   end
 end
