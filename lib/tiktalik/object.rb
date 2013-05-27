@@ -22,7 +22,7 @@ module Tiktalik
       @adapter ||= Faraday.new(:url => Tiktalik.base_url)
     end
 
-    def self.request(method, path, params = { cost:false, vpsimage:false, actions:false })
+    def self.request(method, path, params = {})
       date = Time.now.utc.strftime("%a, %d %b %Y %X GMT")
       url = Tiktalik.base_path + path
       url += "?" + URI.encode_www_form(params) unless params.empty?
