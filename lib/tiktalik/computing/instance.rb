@@ -49,41 +49,57 @@ module Tiktalik
 
       # Delete instance.
       def destroy
-      end
-
-      # List of instance network interfaces.
-      def interfaces
+        request(:delete, "/computing/instance/#{@uuid}")
+        true
       end
 
       # Create virtual machine network interface.
-      def build_interface
+      #
+      # @param [Hash] params Params for interface
+      #
+      # @option params [String] :network_uuid Network UUID. The interface will be assigned an address in this network(required)
+      # @option params [String] :seq Interface number, eg. '3' maps to eth3(required)
+      def build_interface(params = {})
+        require_params(params, :network_uuid, :seq)
+        result = request(:post, "/computing/instance/#{@uuid}/interface", params)
+        puts result.inspect
       end
 
       # Call "Install" operation on virtual machine.
       def install
+        request(:post, "/computing/instance/#{@uuid}/install")
+        true
       end
 
       # Call "Boot" or "Start" operation on virtual machine.
       def start
+        request(:post, "/computing/instance/#{@uuid}/start")
+        true
       end
 
       # Call "Shutdown" operation on virtual machine.
       def stop
+        request(:post, "/computing/instance/#{@uuid}/stop")
+        true
       end
 
       # Force "Shutdown" operation on virtual machine.
       def force_stop
+        request(:post, "/computing/instance/#{@uuid}/force_stop")
+        true
       end
 
       # Do "Backup" of virtual machine. VPS need to be stopped in order to create its backup.
       def backup
+        puts request(:post, "/computing/instance/#{@uuid}/backup").inspect
+        true
       end
 
       private
 
       def after_initialize
         @interfaces = [] unless @interfaces.is_a?(Array)
-        @interfaces.collect! { |interface| VPSNetInterface.new(interface) }
+        @interfaces.collect! { |interface| VPSNetInterface.new(interface.merge(:instance_uuid => @uuid)) }
 
         @vpsimage = VPSImage.new(@vpsimage) if @vpsimage
       end

@@ -21,6 +21,10 @@ module Tiktalik
       def status; 404; end
     end
 
+    class NotAllowed < Tiktalik::Error
+      def status; 405; end
+    end
+
     class Conflict < Tiktalik::Error
       def status; 409; end
     end
@@ -39,6 +43,7 @@ module Tiktalik
       402 => PaymentRequired,
       403 => Forbidden,
       404 => NotFound,
+      405 => NotAllowed,
       409 => Conflict,
       500 => ServerError
     }

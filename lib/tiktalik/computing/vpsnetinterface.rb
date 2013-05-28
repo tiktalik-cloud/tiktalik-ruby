@@ -12,6 +12,8 @@ module Tiktalik
 
       # Remove virtual machine network interface.
       def destroy
+        request(:delete, "/computing/instance/#{@instance_uuid}/interface/#{@uuid}")
+        true
       end
 
       private

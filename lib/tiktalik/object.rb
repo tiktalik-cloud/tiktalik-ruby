@@ -39,7 +39,7 @@ module Tiktalik
 
       raise_error(result.status, result.body) unless result.status == 200
 
-      MultiJson.load(result.body)
+      MultiJson.load(result.body) rescue ""
     end
 
     def self.auth_key(method, url, headers)
@@ -62,6 +62,10 @@ module Tiktalik
 
     def request(*args)
       self.class.request(*args)
+    end
+
+    def require_params(*args)
+      self.class.require_params(*args)
     end
 
   end
