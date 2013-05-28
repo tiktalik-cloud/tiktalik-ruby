@@ -26,11 +26,25 @@ module Tiktalik
       end
 
       # Create a new virtual machine.
-      def self.create
+      #
+      # @param [Hash] params Params for instance
+      #
+      # @option params [String] :image_uuid UID of disk image that should be used(required)
+      # @option params [String] :size Size of instance in Units(required)
+      # @option params [String] :hostname Hostname set at installation time(required)
+      # @option params [Array] :networks Networks to attach, each one as "{uuid}" from Network model.
+      def self.create(params = {})
+        require_params(params, :image_uuid, :size, :hostname)
+        result = request(:post, '/computing/instance', params)
+        new(result)
       end
 
       # Get virtual machine details.
+      #
+      # @param [String] uuid UUID of instance
       def self.find(uuid)
+        result = request(:get, "/computing/instance/#{uuid}")
+        new(result)
       end
 
       # Delete instance.
@@ -70,6 +84,8 @@ module Tiktalik
       def after_initialize
         @interfaces = [] unless @interfaces.is_a?(Array)
         @interfaces.collect! { |interface| VPSNetInterface.new(interface) }
+
+        @vpsimage = VPSImage.new(@vpsimage) if @vpsimage
       end
 
     end

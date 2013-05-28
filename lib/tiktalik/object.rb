@@ -25,9 +25,14 @@ module Tiktalik
     def self.request(method, path, params = {})
       date = Time.now.utc.strftime("%a, %d %b %Y %X GMT")
       url = Tiktalik.base_path + path
-      url += "?" + URI.encode_www_form(params) unless params.empty?
+      url += "?" + URI.encode_www_form(params) unless params.empty? || method != :get
       result = adapter.send(method) do |req|
         req.url url
+        unless params.empty? || method == :get
+          req.body = URI.encode_www_form(params)
+          req.headers['content-md5'] = Digest::MD5.hexdigest(req.body)
+        end
+        req.headers['content-type'] = 'application/x-www-form-urlencoded'
         req.headers['date'] = date
         req.headers['Authorization'] = "TKAuth #{Tiktalik.api_key}:#{auth_key(method, url, req.headers)}"
       end
@@ -38,13 +43,18 @@ module Tiktalik
     end
 
     def self.auth_key(method, url, headers)
-      string_to_sign = [method.to_s.upcase, "", "", headers['date'], url].join("\n")
+      string_to_sign = [method.to_s.upcase, headers['content-md5'], headers['content-type'], headers['date'], url].join("\n")
       Base64.encode64(Digest::HMAC.digest(string_to_sign, Base64.decode64(Tiktalik.api_secret_key), Digest::SHA1)).strip
     end
 
     def self.raise_error(status, message = "")
       message = "401 Not Authorized" if status == 401 # Bug in Tiktalik - return HTML instead of JSON
       raise Error.find_by_status(status), message
+    end
+
+    def self.require_params(params, *require_list)
+      missing = require_list.sort - params.keys.sort
+      raise ArgumentError, "Missing attributes: #{missing}" unless missing.empty?
     end
 
     def after_initialize
