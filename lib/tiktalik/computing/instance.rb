@@ -101,6 +101,9 @@ module Tiktalik
         @interfaces = [] unless @interfaces.is_a?(Array)
         @interfaces.collect! { |interface| VPSNetInterface.new(interface.merge(:instance_uuid => @uuid)) }
 
+        @actions = [] unless @actions.is_a?(Array)
+        @actions.collect! { |action| Operation.new(action) }
+
         @vpsimage = VPSImage.new(@vpsimage) if @vpsimage
       end
 

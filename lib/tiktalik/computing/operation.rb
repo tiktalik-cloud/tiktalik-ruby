@@ -4,10 +4,11 @@ module Tiktalik
   module Computing
     class Operation < Object
 
-      attr_reader :uuid,       # String
-                  :start_time, # Date
-                  :end_time,   # Date
-                  :description # String
+      attr_reader :uuid,        # String
+                  :start_time,  # Date
+                  :end_time,    # Date
+                  :description, # String
+                  :progress     # Fixnum
 
     end
   end
