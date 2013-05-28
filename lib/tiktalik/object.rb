@@ -32,7 +32,7 @@ module Tiktalik
         req.headers['Authorization'] = "TKAuth #{Tiktalik.api_key}:#{auth_key(method, url, req.headers)}"
       end
 
-      raise_error(result.status) unless result.status == 200
+      raise_error(result.status, result.body) unless result.status == 200
 
       MultiJson.load(result.body)
     end
@@ -42,15 +42,16 @@ module Tiktalik
       Base64.encode64(Digest::HMAC.digest(string_to_sign, Base64.decode64(Tiktalik.api_secret_key), Digest::SHA1)).strip
     end
 
-    def self.raise_error(status)
-      raise "Reeceived error status: #{status}"
+    def self.raise_error(status, message = "")
+      message = "401 Not Authorized" if status == 401 # Bug in Tiktalik - return HTML instead of JSON
+      raise Error.find_by_status(status), message
     end
 
     def after_initialize
     end
 
     def request(*args)
-      self.class.request *args
+      self.class.request(*args)
     end
 
   end

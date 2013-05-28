@@ -3,6 +3,7 @@ module Tiktalik
   ROOT = File.expand_path(File.dirname(__FILE__))
 
   autoload :Computing, "#{ROOT}/tiktalik/computing"
+  autoload :Error,     "#{ROOT}/tiktalik/error"
   autoload :Object,    "#{ROOT}/tiktalik/object"
   autoload :VERSION,   "#{ROOT}/tiktalik/version"
 
