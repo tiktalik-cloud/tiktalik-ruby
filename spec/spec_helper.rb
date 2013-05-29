@@ -10,6 +10,7 @@ RSpec.configure do |config|
     Tiktalik.api_secret_key = "API_SECRET_KEY"
 
     # Stub all requests
+    require 'faraday/adapter/test'
     $faraday_stubs = Faraday::Adapter::Test::Stubs.new
     Tiktalik::Object.adapter.adapter :test, $faraday_stubs
   end
