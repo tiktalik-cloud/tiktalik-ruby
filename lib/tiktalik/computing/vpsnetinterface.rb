@@ -19,7 +19,7 @@ module Tiktalik
       private
 
       def after_initialize
-        @network = Network.new(@network)
+        @network = Network.new(@network) if @network
       end
 
     end

@@ -9,7 +9,7 @@ module Tiktalik
                   :type,        # String - 'backup', 'image' or 'install'
                   :is_public,   # Boolean
                   :description, # String
-                  :create_time  # Date
+                  :create_time  # Time
 
       # List of VPS images.
       def self.all
@@ -29,6 +29,12 @@ module Tiktalik
       def destroy
         request(:delete, "/computing/image/#{uuid}")
         true
+      end
+
+      private
+
+      def after_initialize
+        @create_time = Time.parse(@create_time) if @create_time
       end
 
     end

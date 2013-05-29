@@ -20,8 +20,14 @@ module Tiktalik
                   :gross_cost_per_hour # Float
 
       # List of user virtual machines.
-      def self.all
-        results = request(:get, '/computing/instance')
+      #
+      # @param [Hash] params Params for results
+      #
+      # @option params [Boolean] :actions Include list of recent operations if true.
+      # @option params [Boolean] :vpsimage Include details about source image if true.
+      # @option params [Boolean] :cost Include current cost per hour for each instance if true.
+      def self.all(params = {})
+        results = request(:get, '/computing/instance', params)
         results.collect { |result| new(result) }
       end
 
@@ -62,7 +68,7 @@ module Tiktalik
       def build_interface(params = {})
         require_params(params, :network_uuid, :seq)
         result = request(:post, "/computing/instance/#{@uuid}/interface", params)
-        puts result.inspect
+        VPSNetInterface.new(result)
       end
 
       # Call "Install" operation on virtual machine.
@@ -91,7 +97,7 @@ module Tiktalik
 
       # Do "Backup" of virtual machine. VPS need to be stopped in order to create its backup.
       def backup
-        puts request(:post, "/computing/instance/#{@uuid}/backup").inspect
+        request(:post, "/computing/instance/#{@uuid}/backup")
         true
       end
 
@@ -99,10 +105,10 @@ module Tiktalik
 
       def after_initialize
         @interfaces = [] unless @interfaces.is_a?(Array)
-        @interfaces.collect! { |interface| VPSNetInterface.new(interface.merge(:instance_uuid => @uuid)) }
+        @interfaces.collect! { |interface| interface.is_a?(VPSNetInterface) ? interface : VPSNetInterface.new(interface.merge(:instance_uuid => @uuid)) }
 
         @actions = [] unless @actions.is_a?(Array)
-        @actions.collect! { |action| Operation.new(action) }
+        @actions.collect! { |action| action.is_a?(Operation) ? action : Operation.new(action) }
 
         @vpsimage = VPSImage.new(@vpsimage) if @vpsimage
       end

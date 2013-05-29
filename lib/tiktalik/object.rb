@@ -19,16 +19,17 @@ module Tiktalik
     private
 
     def self.adapter
-      @adapter ||= Faraday.new(:url => Tiktalik.base_url)
+      @@adapter ||= Faraday.new(:url => Tiktalik.base_url)
     end
 
     def self.request(method, path, params = {})
+      raise ArgumentError, "Set Tiktalik.api_key and Tiktalik.api_secret_key first" unless Tiktalik.api_key && Tiktalik.api_secret_key
       date = Time.now.utc.strftime("%a, %d %b %Y %X GMT")
       url = Tiktalik.base_path + path
-      url += "?" + URI.encode_www_form(params) unless params.empty? || method != :get
+      url += "?" + URI.encode_www_form(params) unless params.nil? || params.empty? || method != :get
       result = adapter.send(method) do |req|
         req.url url
-        unless params.empty? || method == :get
+        unless params.nil? || params.empty? || method == :get
           req.body = URI.encode_www_form(params)
           req.headers['content-md5'] = Digest::MD5.hexdigest(req.body)
         end
