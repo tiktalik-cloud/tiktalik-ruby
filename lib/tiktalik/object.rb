@@ -19,7 +19,12 @@ module Tiktalik
     private
 
     def self.adapter
-      @@adapter ||= Faraday.new(:url => Tiktalik.base_url)
+      @@adapter ||= Faraday.new(
+        :url => Tiktalik.base_url,
+        :ssl => {
+          :ca_file => Tiktalik.ca_file
+        }
+      )
     end
 
     def self.request(method, path, params = {})

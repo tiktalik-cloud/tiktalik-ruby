@@ -16,4 +16,7 @@ module Tiktalik
   def self.api_secret_key; @api_secret_key || ENV['API_SECRET_KEY']; end
   def self.api_secret_key=(val); @api_secret_key = val; end
 
+  def self.ca_file; @ca_file || nil; end
+  def self.ca_file=(val); @ca_file = val; end
+
 end
