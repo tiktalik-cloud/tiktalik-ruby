@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.description = %q{Tiktalik.com Ruby API library}
 
   s.add_dependency 'faraday', '~> 0.8.8'
-  s.add_dependency 'multi_json', '~> 1.7.9'
+  s.add_dependency 'multi_json', '~> 1.8.4'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
